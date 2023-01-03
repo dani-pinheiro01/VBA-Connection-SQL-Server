@@ -1,0 +1,78 @@
+On Error Resume Next
+
+Dim Cn As New ADODB.Connection
+
+Dim Rs As New ADODB.Recordset
+
+Dim strcn, strts As String
+
+
+strcn = "Provider=SQLOLEDB.1;Password= yourpassword ;Persist Security Info=True;User ID= YOURUSER ;Data Source= YOURSERVER ; initial catalog= YOURDATABASE "
+
+Cn.Open strcn
+
+'INSERT ON DATABASE
+
+  strrs = "INSERT INTO CITY(DAT_STATUS, ADDRESS, POSTAL_CODE, NUMBER)" & "values( '" & UCase(TextBox1.Text) & "' ,'" & UCase(TextBox2.Text) & "','" & UCase(TextBox3.Text) & "','" & UCase(TextBox4.Text) & "','" & UCase(TextBox5.Text) & "','" & UCase(ComboBox1.Text) & "', getdate())"
+
+'UPDATE ON DATABASE
+  
+  strrs = "UPDATE CITY SET NUMBER = '" & UCase(ComboBox1.Text) & "' , DAT_STATUS = GETDATE(), ADDRESS = '" & UCase(TextBox2.Text) & "' WHERE POSTAL_CODE = '" & UCase(TextBox1.Text) & "' "
+
+'QUERY WITH VIEW ON LISTBOX
+  
+  Dim Cn As ADODB.Connection
+  Dim Rs As ADODB.Recordset
+  Dim strSql As String
+  Dim i As Long
+
+  On Error Resume Next
+    
+      Me.ListBox1.Clear
+  Set Cn = New ADODB.Connection
+  With Cn
+  .Provider = "SQLOLEDB.1;Password= YOURPASSWORD ;Persist Security Info=True;User ID= YOURUSER ;Data Source= YOURSERVER ; initial catalog= YOURDATABASE "
+
+  .Open
+
+  End With
+
+  Set Rs = New ADODB.Recordset
+
+  Rs.CursorLocation = adUseServer
+
+  strSql = "DECLARE @ADDRESS VARCHAR(7);SET @ADDRESS = '" & ADDRESS.Text & "';IF(@ADDRESS <> '') select * FROM CITY WHERE ADDRESS = @ADDRESS Else select * CITY"
+
+  Rs.Open strSql, Cn
+
+  Rs.MoveFirst
+
+  i = 0
+
+  With Me.ListBox1
+      .Clear
+    
+  Do
+
+      ListBox1.AddItem
+      ListBox1.List(i, 0) = Rs.Fields("Placa")
+      ListBox1.List(i, 1) = Rs.Fields("Transportadora")
+      ListBox1.List(i, 2) = Rs.Fields("Tipo_veículo")
+      ListBox1.List(i, 3) = Rs.Fields("Qtde_de_Rolls")
+      ListBox1.List(i, 4) = Rs.Fields("AnoFabricacao")
+      ListBox1.List(i, 5) = Rs.Fields("STATUS")
+      ListBox1.List(i, 6) = Rs.Fields("DAT_STATUS")
+    
+      i = i + 1
+
+      Rs.MoveNext
+
+  Loop Until Rs.EOF
+
+
+  End With
+
+
+  On Error GoTo 0
+
+  Rs.Open strrs, Cn
