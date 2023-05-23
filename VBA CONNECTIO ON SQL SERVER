@@ -1,3 +1,5 @@
+
+'DECLARE VARIABLES
 On Error Resume Next
 
 Dim Cn As New ADODB.Connection
@@ -6,7 +8,7 @@ Dim Rs As New ADODB.Recordset
 
 Dim strcn, strts As String
 
-
+'CONNECTION WITH DATABASE
 strcn = "Provider=SQLOLEDB.1;Password= yourpassword ;Persist Security Info=True;User ID= YOURUSER ;Data Source= YOURSERVER ; initial catalog= YOURDATABASE "
 
 Cn.Open strcn
